@@ -12,7 +12,7 @@
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 </head>
-<body>
+<body{% if page.body_class %} class="{{ page.body_class }}" {% endif %}>
     <div class="wrapper">
       <header>
         <h1><a href="/">Chris LaRose</a></h1>
@@ -24,7 +24,7 @@
             <li><a href="https://github.com/cjlarose">Github</a></li>
         </ul>
       </header>
-      <section>
+      <section id="content">
         {{ content }}
       </section>
       <footer>

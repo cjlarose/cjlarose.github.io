@@ -15,3 +15,18 @@
 .entries li h2 {
     margin-bottom: 0;
 }
+
+h3 small {
+    color: #666;
+    float: right;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+body.resume #content ul {
+    margin-left: 0;
+    padding: 0; 
+}
+
+body.resume #content li {
+    list-style: none;
+}
