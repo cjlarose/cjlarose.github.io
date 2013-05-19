@@ -1,0 +1,11 @@
+.entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.entries li {
+    margin-bottom: 20px;
+}
+.entries li h3 {
+    margin-bottom: 0;
+}
