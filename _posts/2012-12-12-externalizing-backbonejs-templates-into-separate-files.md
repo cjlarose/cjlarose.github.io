@@ -2,7 +2,7 @@
 layout: blog_entry
 title: Externalizing Backbone.js templates into separate files
 ---
-So plenty of the Backbone.js tutorials ask you to define your Underscore templates within &lt;script&gt; tags.  For example, Thomas Davis shows this template in his tutorial:
+So plenty of the [Backbone.js](http://backbonejs.org/) tutorials ask you to define your [Underscore templates](http://underscorejs.org/#template) within &lt;script&gt; tags.  For example, Thomas Davis shows this template in [his tutorial](http://backbonetutorials.com/what-is-a-view/):
 
 {% highlight html+erb %}
 <script type="text/template" id="search_template">
@@ -27,7 +27,7 @@ var App.Views.SearchView = Backbone.View.extend({
 
 This means that if you want to initialize your views like this, you'd have to wait until after the DOMContentLoaded event to fire to ensure that $('#search_template') actually gets that element.  Maybe that's not a big deal to you.  But editing a super long HTML file with a bunch of hacky &lt;script&gt; elements is not a fun development workflow. That's lame.  We can do better.
 
-Some recommend putting those templates into separate .html files and getting them all via AJAX.  That's really nice for workflow, but it's really expensive if you have a lot of templates.  We can do better, still. Rico Sta Cruz recommends using JST Templates.  This means that you define your templates in separate files on the server, and your server-side code takes care of putting it all together into a single JavaScript file.  This is ideal, in my opinion, for most projects.  And if you're using Rails, EJS will do the heavy lifting for you.
+[Some](http://coenraets.org/blog/2012/01/backbone-js-lessons-learned-and-improved-sample-app/) recommend putting those templates into separate .html files and getting them all via AJAX.  That's really nice for workflow, but it's really expensive if you have a lot of templates.  We can do better, still. Rico Sta Cruz [recommends using JST Templates](http://ricostacruz.com/backbone-patterns/#jst_templates).  This means that you define your templates in separate files on the server, and your server-side code takes care of putting it all together into a single JavaScript file.  This is ideal, in my opinion, for most projects.  And if you're using Rails, [EJS](http://embeddedjs.com/) will do the heavy lifting for you.
 
 But if you're not using Rails, you might want to roll your own solution.  Maybe you're running a Django app.  Let's write a view function that will return a dynamically-generated JavaScript file that includes all of our Underscore templates.
 
