@@ -23,7 +23,7 @@ header ul.clearfix {
     position: relative;
     border-width: 0;
     margin: 0;
-    padding: 0 34% 0 0;
+    padding: 0 36% 0 0;
 }
 footer {
     display: none;
@@ -31,10 +31,18 @@ footer {
 
 #skills {
     float: left;
-    width: 30%;
+    width: 32%;
     position: absolute;
     right: 0px;
     top: 0px;
+}
+
+#contact-info {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: right;
+    margin-top: -4.5em;
 }
 
 .print-visible {
