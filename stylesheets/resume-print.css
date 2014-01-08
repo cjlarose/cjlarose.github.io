@@ -1,0 +1,45 @@
+body {
+    font: 8pt/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 20px;
+}
+small {
+    font-size: 6pt;
+}
+.wrapper {
+    width: 100%;
+}
+header {
+    width: auto;
+    position: inherit;
+    float: none;
+}
+header ul.clearfix {
+    display: none;
+}
+
+#content {
+    float: none;
+    width: auto;
+    position: relative;
+    border-width: 0;
+    margin: 0;
+    padding: 0 34% 0 0;
+}
+footer {
+    display: none;
+}
+
+#skills {
+    float: left;
+    width: 30%;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.print-visible {
+    display: block;
+}
+.print-hidden {
+    display: none;
+}
