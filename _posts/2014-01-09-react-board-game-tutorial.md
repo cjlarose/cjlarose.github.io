@@ -3,11 +3,11 @@ layout: blog_entry
 title: "React beginner tutorial: implementing the board game Go"
 ---
 
-[React][1] is &ldquo;a javascript library for building user interfaces&rdquo;. If you haven't done so already, I highly recommend you watch [Pete Hunt's presentation][2] on React's design principles. React has a relatively simple library, especially when compared to full-fledged MVC frameworks like Angular, Ember, Backbone, and the rest. It's a pleasure to work with, so let's get started.
+[React][1] is &ldquo;a javascript library for building user interfaces&rdquo;. If you haven't done so already, I highly recommend you watch [Pete Hunt's presentation][2] on React's design principles. React is a relatively simple library, especially when compared to full-fledged MVC frameworks like Angular, Ember, Backbone, and the rest. It's a pleasure to work with, so let's get started.
 
 Note: There's code fragments sprinkled throughout this post. To see the source code for the final application, check out my [Github repository][7].
 
-Today, we'll be implementing the board game [Go][3]. If you don't know how to play, that's okay. All you need to know for now is that players alternatate placing stones on intersections of the board's grid to capture their opponent's stones and claim the greatest amount of territory. Take a look at the [live preview][4] to get an idea of what we'll be building.
+Today, we'll be implementing the board game [Go][3]. If you don't know how to play, that's okay. All you need to know for now is that players alternate placing stones on intersections of the board's grid to capture their opponent's stones and claim the greatest amount of territory. Take a look at the [live preview][4] to get an idea of what we'll be building.
 
 Let's start with `index.html`.
 
@@ -206,8 +206,8 @@ An instance of the `Board` class has several attributes that describe what a gam
 
 * `Board.size` stores an integer representing the dimensions of the game board. Go games are played on a square grid, typically consisting of 19x19 intersections, but beginners sometimes play on smaller 9x9 and 13x13 boards.
 * `Board.current_color` stores an integer that identifies whose turn it is. Because the player with the black stones plays first, we initialize `this.current_color` to `Board.BLACK`.
-* `Board.board` is an integer matrix that stores which color stones occupy which spaces. Because the board starts empty, we initialze every cell to `Board.EMPTY`.
-* A game of Go ends when both players pass their turns consectutively. If a player passes his turn, we set `Board.last_move_passed` so that if the next move is also a pass, we can detect that the game has ended.
+* `Board.board` is an integer matrix that stores which color stones occupy which spaces. Because the board starts empty, we initialize every cell to `Board.EMPTY`.
+* A game of Go ends when both players pass their turns consecutively. If a player passes his turn, we set `Board.last_move_passed` so that if the next move is also a pass, we can detect that the game has ended.
 * When a player threatens his opponent, we set the flag `Board.in_atari` to true, so we can alert the player in danger. In Go, this is considered to be polite. 
 * Finally, we set the `Board.attempted_suicide` flag if a user made an invalid move &mdash; one that would mean suicide for their piece.
 
@@ -280,7 +280,7 @@ var BoardView = React.createClass({
 
 BoardView has only two properties we'll use: `BoardView.board` and `BoardView.onPlay`. These properties play the same roles here as they did in `BoardIntersection`. In the `render` method of this Component, we create n x n instances of `BoardIntersection` and add them each in as children.
 
-Next, we create a few more components: one to display alert mesages and another that provides a button to pass your turn.
+Next, we create a few more components: one to display alert messages and another that provides a button to pass your turn.
 
 {% highlight javascript %}
 var AlertView = React.createClass({
@@ -309,7 +309,7 @@ var PassView = React.createClass({
 });
 {% endhighlight %} 
 
-Finally, we build a component to wrap all of our sub-Components up. We initialize an instace of our model, and call `React.renderComponent` to bind a Component to a DOM element.
+Finally, we build a component to wrap all of our sub-Components up. We initialize an instance of our model, and call `React.renderComponent` to bind a Component to a DOM element.
 
 {% highlight javascript %} 
 var ContainerView = React.createClass({
