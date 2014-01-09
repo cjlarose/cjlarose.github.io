@@ -250,7 +250,7 @@ var BoardIntersection = React.createClass({
 BoardIntersection has several properties that we can pass when we initialize an instance:
 
 * `BoardIntersection.board` is the instance of `Board` we're representing.
-* `BoardIntersection.color` represents which stone, if any, occupies this intersection.
+* `BoardIntersection.color` represents which color stone, if any, occupies this intersection.
 * `BoardIntersection.row` and `BoardIntersection.col` represent the `(i,j)` position of this intersection.
 * `BoardIntersection.onPlay` is a function we'll pass in that we want to be executed whenever a move is executed on the game `Board`. We'll call this function whenever a player clicks on the intersection.
 
@@ -338,7 +338,7 @@ React.renderComponent(
 );
 {% endhighlight %}
 
-The `ContainerView` is out only stateful Component. It has exactly only property of its state: `board` which is initialized to the `board` passed it from its `props`. We pass a callback function called `this.onBoardUpdate` to the `BoardView`, so we can be notified when the board has changed. 
+The `ContainerView` is our only stateful Component. It has exactly one property of its state: `board`, which is initialized to the `board` passed to it via its `props`. We pass a callback function called `this.onBoardUpdate` to the `BoardView`, so we can be notified when the board has changed. 
 
 ## How it all works 
 
