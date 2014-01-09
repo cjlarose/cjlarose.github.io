@@ -38,3 +38,25 @@ body.resume #content li {
 .print-visible {
     display: none;
 }
+
+/*
+ * Activity feed
+ */
+
+#activity-feed ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#activity-feed > ul > li {
+    margin-bottom: 1.5em;
+}
+
+#activity-feed ul ul li {
+    margin-left: 1em;
+}
+
+#activity-feed time {
+    color: #999;
+}
