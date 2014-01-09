@@ -1,6 +1,6 @@
 ---
 layout: blog_entry
-title: "React Beginner Tutorial: Implementing the Board Game Go"
+title: "React beginner tutorial: implementing the board game Go"
 ---
 
 [React][1] is &ldquo;a javascript library for building user interfaces&rdquo;. If you haven't done so already, I highly recommend you watch [Pete Hunt's presentation][2] on React's design principles. React has a relatively simple library, especially when compared to full-fledged MVC frameworks like Angular, Ember, Backbone, and the rest. It's a pleasure to work with, so let's get started.
