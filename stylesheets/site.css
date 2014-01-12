@@ -60,3 +60,11 @@ body.resume #content li {
 #activity-feed time {
     color: #999;
 }
+
+/*
+ * Big screens
+ */
+@media print, screen and (min-width: 1060px) {
+    .wrapper {width: 960px;}
+    #content {width: 600px;}
+}
