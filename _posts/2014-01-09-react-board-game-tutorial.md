@@ -70,7 +70,8 @@ Board.prototype.create_board = function(size) {
  * Switches the current player
  */
 Board.prototype.switch_player = function() {
-    this.current_color = this.current_color == Board.BLACK ? Board.WHITE : Board.BLACK;
+    this.current_color = 
+        this.current_color == Board.BLACK ? Board.WHITE : Board.BLACK;
 };
 
 /*
@@ -236,12 +237,13 @@ var BoardIntersection = React.createClass({
             left: this.props.col * GRID_SIZE
         };
 
-        var classes = "intersection";
+        var classes = "intersection ";
         if (this.props.color != Board.EMPTY)
-            classes += " " + (this.props.color == Board.BLACK ? "black" : "white");
+            classes += this.props.color == Board.BLACK ? "black" : "white";
 
         return (
-            <div onClick={this.handleClick} className={classes} style={style}></div>
+            <div onClick={this.handleClick} 
+                className={classes} style={style}></div>
         );
     }
 });
@@ -303,7 +305,8 @@ var PassView = React.createClass({
     },
     render: function() {
         return (
-            <input id="pass-btn" type="button" value="Pass" onClick={this.handleClick} />
+            <input id="pass-btn" type="button" value="Pass" 
+                onClick={this.handleClick} />
         );
     }
 });
@@ -324,7 +327,8 @@ var ContainerView = React.createClass({
             <div>
                 <AlertView board={this.state.board} />
                 <PassView board={this.state.board} />
-                <BoardView board={this.state.board} onPlay={this.onBoardUpdate.bind(this)} />
+                <BoardView board={this.state.board} 
+                    onPlay={this.onBoardUpdate.bind(this)} />
             </div>
         )
     }
