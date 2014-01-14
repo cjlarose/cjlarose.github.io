@@ -3,7 +3,7 @@ layout: blog_entry
 title: "Django custom model field for storing version numbers"
 ---
 
-Consider you'd like to store version numbers like `v1.0`, `v2.0.3`, and `v5.4.3.2` in your Django application. One way to solve this problem is to store version numbers as strings, but the problem of sorting them becomes apparent: version `10.0` is more recent than version `2.0`, but compared lexicographically, `"10.0" > "2.0"` evaluates to `False`. You can chose to implement sorting on the Python side of the query result, by splitting on the `.` character and comparing components left-to-right, but ideally, we'd like our DBMS to handle sorting for us. 
+Consider that you'd like to store version numbers like `v1.0`, `v2.0.3`, and `v5.4.3.2` in your Django application. One way to solve this problem is to store version numbers as strings, but the problem of sorting them becomes apparent: version `10.0` is more recent than version `2.0`, but compared lexicographically, `"10.0" > "2.0"` evaluates to `False`. You can chose to implement sorting on the Python side of the query result, by splitting on the `.` character and comparing components left-to-right, but ideally, we'd like our DBMS to handle sorting for us. 
 
 One way to fix this is to zero-pad all components of the version: `"010.0" > "002.0"` evaluates to `True` as we'd expect. This is fine solution, and even with just three places for each component, you can reach reasonably high version numbers. Additionally, you can store arbitrarily-long version numbers like `"001.002.003.004.005.006"`.
 
