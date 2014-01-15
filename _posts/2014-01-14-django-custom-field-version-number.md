@@ -3,7 +3,7 @@ layout: blog_entry
 title: "Django custom model field for storing version numbers"
 ---
 
-Consider that you'd like to store version numbers like `v1.0`, `v2.0.3`, and `v5.4.3.2` in your Django application. One way to solve this problem is to store version numbers as strings, but the problem of sorting them becomes apparent: version `10.0` is more recent than version `2.0`, but compared lexicographically, `"10.0" > "2.0"` evaluates to `False`. You can chose to implement sorting on the Python side of the query result, by splitting on the `.` character and comparing components left-to-right, but ideally, we'd like our DBMS to handle sorting for us. 
+Consider that you'd like to store version numbers like `v1.0`, `v2.0.3`, and `v5.4.3.2` in your Django application. One way to solve this problem is to store version numbers as strings, but the problem of sorting them becomes apparent: version `10.0` is more recent than version `2.0`, but compared lexicographically, `"10.0" > "2.0"` evaluates to `False`. You can choose to implement sorting on the Python side of the query result, by splitting on the `.` character and comparing components left-to-right, but ideally, we'd like our DBMS to handle sorting for us. 
 
 One way to fix the lexicographical sort problem is to zero-pad all components of the version: `"010.0" > "002.0"` evaluates to `True` as we'd expect. This is fine solution, and even with just three places for each component, you can reach reasonably high version numbers. Additionally, you can store arbitrarily-long version numbers like `"001.002.003.004.005.006"`.
 
@@ -89,8 +89,17 @@ class VersionNumberField(models.Field):
         return self.get_prep_value(value)
 {% endhighlight %}
 
-In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of is that Django's [IntegerField](https://docs.djangoproject.com/en/1.6/ref/models/fields/#integerfield) supports *signed* 32-bit integers (from `-2147483648` to `2147483647`). This is why our `VersionNumber`'s `__int__` implementation returns integers in the same range.
+In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of is that Django's [IntegerField][1] supports *signed* 32-bit integers (from `-2147483648` to `2147483647`). This is why our `VersionNumber`'s `__int__` implementation returns integers in the same range.
 
-Looking at all of these strange additions subtractions to `2**31`, it seems like it would be nice if Django provided an UnsignedIntegerField, but it doesn't. You can [implement your own](http://stackoverflow.com/a/10678167/1231384), but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. 
+Looking at all of these strange additions subtractions to `2**31`, it seems like it would be nice if Django provided an UnsignedIntegerField, but it doesn't. You can [implement your own][2], but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. 
 
-Our `VersionNumberField` can store version numbers from `0.0.0.0` to `255.255.255.255`. That range might look familiar because it's the same range as IPv4 addresses. This of course, should come as no surprise because IPv4 addresses *are* 32-bit integers&mdash;we mere humans just prefer the dot-decimal notation. Out of curiosity, I took at look at Django's (soon-to-be-deprecated) [IPAddressField](https://docs.djangoproject.com/en/1.6/ref/models/fields/#django.db.models.IntegerField) to see if they do something similar. Turns out, they don't. In MySQL and SQLite, Django uses a `char(15)` field. Similarly, Django uses a `VARCHAR2(15)` in Oracle. In PostgreSQL, Django uses the `inet` field, which [according to the documentation](http://www.postgresql.org/docs/8.2/static/datatype-net-types.html) stores both IPv4 and IPv6 host addresses with an optional netmask.
+Our `VersionNumberField` can store version numbers from `0.0.0.0` to `255.255.255.255`. That range might look familiar because it's the same range as IPv4 addresses. This of course, should come as no surprise because IPv4 addresses *are* 32-bit integers&mdash;we mere humans just prefer the dot-decimal notation. Out of curiosity, I took at look at Django's (soon-to-be-deprecated) [IPAddressField][3] to see if they do something similar. Turns out, they don't. In [MySQL][7] and [SQLite][8], Django uses a `char(15)` field. Similarly, Django uses a `VARCHAR2(15)` in [Oracle][6]. In [PostgreSQL][5], Django uses the `inet` field, which [according to the documentation][4] stores both IPv4 and IPv6 host addresses with an optional netmask. It seems intuitive that storing IPv4 address as integers instead of as strings would save space as well as time on `ORDER BY` queries, so it's a curious anecdote.
+
+[1]: https://docs.djangoproject.com/en/1.6/ref/models/fields/#integerfield
+[2]: http://stackoverflow.com/a/10678167/1231384
+[3]: https://docs.djangoproject.com/en/1.6/ref/models/fields/#ipaddressfield
+[4]: http://www.postgresql.org/docs/8.2/static/datatype-net-types.html
+[5]: https://github.com/django/django/blob/3bc0d46a840f17dce561daca8a6b8690b2cf5d0a/django/db/backends/postgresql_psycopg2/creation.py#L24
+[6]: https://github.com/django/django/blob/3bc0d46a840f17dce561daca8a6b8690b2cf5d0a/django/db/backends/oracle/creation.py#L36
+[7]: https://github.com/django/django/blob/3bc0d46a840f17dce561daca8a6b8690b2cf5d0a/django/db/backends/mysql/creation.py#L23
+[8]: https://github.com/django/django/blob/3bc0d46a840f17dce561daca8a6b8690b2cf5d0a/django/db/backends/sqlite3/creation.py#L26
