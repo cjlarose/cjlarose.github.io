@@ -5,7 +5,7 @@ title: "Django custom model field for storing version numbers"
 
 Consider that you'd like to store version numbers like `v1.0`, `v2.0.3`, and `v5.4.3.2` in your Django application. One way to solve this problem is to store version numbers as strings, but the problem of sorting them becomes apparent: version `10.0` is more recent than version `2.0`, but compared lexicographically, `"10.0" > "2.0"` evaluates to `False`. You can chose to implement sorting on the Python side of the query result, by splitting on the `.` character and comparing components left-to-right, but ideally, we'd like our DBMS to handle sorting for us. 
 
-One way to fix this is to zero-pad all components of the version: `"010.0" > "002.0"` evaluates to `True` as we'd expect. This is fine solution, and even with just three places for each component, you can reach reasonably high version numbers. Additionally, you can store arbitrarily-long version numbers like `"001.002.003.004.005.006"`.
+One way to fix the lexicographical sort problem is to zero-pad all components of the version: `"010.0" > "002.0"` evaluates to `True` as we'd expect. This is fine solution, and even with just three places for each component, you can reach reasonably high version numbers. Additionally, you can store arbitrarily-long version numbers like `"001.002.003.004.005.006"`.
 
 The solution presented below takes another approach. Instead of storing version numbers as strings, we store them as 32-bit integers. We partition those 32 bits into four parts: major, minor, patch, and build. Using this scheme, we can unambiguously map any 4-part version number to a 32-bit integer. Unfortunately, this solution fixes the number of components you can represent in your version numbers, so this may not be the appropriate approach for your application.
 
@@ -20,8 +20,8 @@ class VersionNumber(object):
     def __int__(self):
         """
         Maps a version number to a two's complement signed 32-bit integer by
-        first calculating a signed 32-bit integer, then casts to signed by
-        subtracting 2**31
+        first calculating an unsigned 32-bit integer in the range [0,2**32-1],
+        then subtracts 2**31 to get a number in the range [-2*31, 2**31-1].
         """
         major, minor, patch, build = self.number
         num =  major << 24 | minor << 16 | patch << 8 | build
@@ -42,7 +42,7 @@ class VersionNumber(object):
         return "<VersionNumber(%d, %d, %d, %d)>" % self.number
 {% endhighlight %}
 
-In the `__int__` method of the `VersionNumber` class, we can see how the version number is mapped to an integer by using some bitwise arithmetic to store the major version in the highest 8 bits, the minor version in the next 8 bits, the patch in the next 8 bits, and the build number in the lowest 8 bits. Here, `__int__` will always return an `int` in the range `[0,4294967295]`.
+In the `__int__` method of the `VersionNumber` class, we can see how the version number is mapped to an integer by using some bitwise arithmetic to store the major version in the highest 8 bits, the minor version in the next 8 bits, the patch in the next 8 bits, and the build number in the lowest 8 bits. Here, `__int__` will always return an `int` in the range `[-2147483648, 2147483647]`.
 
 {% highlight python %}
 import struct
@@ -89,4 +89,8 @@ class VersionNumberField(models.Field):
         return self.get_prep_value(value)
 {% endhighlight %}
 
-In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of, though, is that Django's [IntegerField](https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.IntegerField) supports *signed* 32-bit integers (from `-2147483648` to `2147483647`), but our `VersionNumber`'s `__int__` implementation returns *unsigned* integers. This means that the greatest version number we can store is `127.255.255.255` instead of `255.255.255.255`. Unfortunately, there isn't an easy way out of this. Django doesn't provide a `UnsignedIntegerField`. You can [implement your own](http://stackoverflow.com/a/10678167/1231384), but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. In practice, though, `127.255.255.255` might be an acceptable limit for you application.
+In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of is that Django's [IntegerField](https://docs.djangoproject.com/en/1.6/ref/models/fields/#integerfield) supports *signed* 32-bit integers (from `-2147483648` to `2147483647`). This is why our `VersionNumber`'s `__int__` implementation returns integers in the same range.
+
+Looking at all of these strange additions subtractions to `2**31`, it seems like it would be nice if Django provided an UnsignedIntegerField, but it doesn't. You can [implement your own](http://stackoverflow.com/a/10678167/1231384), but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. 
+
+Our `VersionNumberField` can store version numbers from `0.0.0.0` to `255.255.255.255`. That range might look familiar because it's the same range as IPv4 addresses. This of course, should come as no surprise because IPv4 addresses *are* 32-bit integers&mdash;we mere humans just prefer the dot-decimal notation. Out of curiosity, I took at look at Django's (soon-to-be-deprecated) [IPAddressField](https://docs.djangoproject.com/en/1.6/ref/models/fields/#django.db.models.IntegerField) to see if they do something similar. Turns out, they don't. In MySQL and SQLite, Django uses a `char(15)` field. Similarly, Django uses a `VARCHAR2(15)` in Oracle. In PostgreSQL, Django uses the `inet` field, which [according to the documentation](http://www.postgresql.org/docs/8.2/static/datatype-net-types.html) stores both IPv4 and IPv6 host addresses with an optional netmask.
