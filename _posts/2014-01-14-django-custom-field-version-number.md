@@ -13,10 +13,19 @@ The solution presented below takes another approach. Instead of storing version 
 class VersionNumber(object):
     def __init__(self, major, minor=0, patch=0, build=0):
         self.number = (int(major), int(minor), int(patch), int(build))
+        if any([i < 0 or i > 255 for i in self.number]):
+            raise ValueError("Version number components must between 0 and 255,"
+                             " inclusive")
 
     def __int__(self):
+        """
+        Maps a version number to a two's complement signed 32-bit integer by
+        first calculating a signed 32-bit integer, then casts to signed by
+        subtracting 2**31
+        """
         major, minor, patch, build = self.number
-        return major << 24 | minor << 16 | patch << 8 | build
+        num =  major << 24 | minor << 16 | patch << 8 | build
+        return num - 2**31
 
     def __str__(self):
         """
@@ -38,10 +47,11 @@ In the `__int__` method of the `VersionNumber` class, we can see how the version
 {% highlight python %}
 import struct
 from django.db import models
+
 class VersionNumberField(models.Field):
     """
     A version number. Stored as a integer. Retrieved as a VersionNumber. Like 
-    magic. Major must not exceed 127. Minor, patch, build must not exceed 255.
+    magic. Major, minor, patch, build must not exceed 255
     """
     __metaclass__ = models.SubfieldBase
 
@@ -59,7 +69,7 @@ class VersionNumberField(models.Field):
         if isinstance(value, tuple):
             return VersionNumber(*value)
 
-        part_bytes = struct.pack(">I", value)
+        part_bytes = struct.pack(">I", value + 2**31)
         part_ints = [ord(i) for i in part_bytes]
         return VersionNumber(*part_ints)
 
@@ -75,8 +85,8 @@ class VersionNumberField(models.Field):
         return int(value)
 
     def value_to_string(self, obj):
-        value = self._get_value_from_obj(obj)
-        return self.get_db_prep_value(value)
+        value = self._get_val_from_obj(obj)
+        return self.get_prep_value(value)
 {% endhighlight %}
 
 In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of, though, is that Django's [IntegerField](https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.IntegerField) supports *signed* 32-bit integers (from `-2147483648` to `2147483647`), but our `VersionNumber`'s `__int__` implementation returns *unsigned* integers. This means that the greatest version number we can store is `127.255.255.255` instead of `255.255.255.255`. Unfortunately, there isn't an easy way out of this. Django doesn't provide a `UnsignedIntegerField`. You can [implement your own](http://stackoverflow.com/a/10678167/1231384), but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. In practice, though, `127.255.255.255` might be an acceptable limit for you application.
