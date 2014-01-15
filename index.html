@@ -23,6 +23,14 @@ head_elements: |
   var username = "cjlarose";
   var url = "https://api.github.com/users/" + username + "/events";
   $(function() {
-      $("#activity-feed").githubActivity({username: "cjlarose"});
+      $("#activity-feed")
+        .hide()
+        .githubActivity({
+            username: "cjlarose",
+            num_events: 5,
+            success:  function() {
+                $(this).animate({opacity: 'toggle', height: 'toggle'}, 'slow');
+            }
+        });;
   });
   </script>

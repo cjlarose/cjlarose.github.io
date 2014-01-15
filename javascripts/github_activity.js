@@ -1,5 +1,7 @@
 $.fn.githubActivity = function(options) {
 
+    var num_events = options.num_events || 5;
+
     var get_gravatar_url = function(email, size) {
         var hash = CryptoJS.MD5(email.toLowerCase());
         var url = "//gravatar.com/avatar/" + hash;
@@ -11,7 +13,7 @@ $.fn.githubActivity = function(options) {
         var push_events = $.grep(data.data, function(d) {
             return d.type == "PushEvent"
         });
-        var items = $.map(push_events.slice(0,5), function(d) {
+        var items = $.map(push_events.slice(0, num_events), function(d) {
             var date = moment(d.created_at);
             var $date = $("<time>")
                 .attr('datetime', date.format())
@@ -48,7 +50,11 @@ $.fn.githubActivity = function(options) {
     var github_url = "https://api.github.com/users/" + options.username + 
         "/events?callback=?";
     $.getJSON(github_url, function( data ) {
-        if (data.meta.status == 200)
+        if (data.meta.status == 200) {
             self.append(render_activity(data));
+            if (options.success)
+                options.success.bind(self)();
+        }
     });
+    return this;
 };
