@@ -39,7 +39,11 @@ class VersionNumber(object):
         return ".".join([str(i) for i in self.number[:end_index+1]])
 
     def __repr__(self):
-        return "<VersionNumber(%d, %d, %d, %d)>" % self.number
+        return "<%s.%s%s>" % (
+            self.__class__.__module__, 
+            self.__class__.__name__, 
+            repr(self.number)
+        )
 {% endhighlight %}
 
 In the `__int__` method of the `VersionNumber` class, we can see how the version number is mapped to an integer by using some bitwise arithmetic to store the major version in the highest 8 bits, the minor version in the next 8 bits, the patch in the next 8 bits, and the build number in the lowest 8 bits. Here, `__int__` will always return an `int` in the range `[-2147483648, 2147483647]`.
