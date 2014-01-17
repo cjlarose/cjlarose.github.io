@@ -16,8 +16,8 @@ Let's start with `index.html`.
 <html>
   <head>
     <title>React Go Tutorial</title>
+    <link type="text/css" href="style.css" rel="stylesheet" />
   </head>
-  <link type="text/css" href="style.css" rel="stylesheet" />
   <body>
     <div id="main">
     </div>
