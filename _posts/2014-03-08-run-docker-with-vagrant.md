@@ -50,7 +50,7 @@ Docker.
     vagrant@precise64:~$ curl https://get.docker.io/ubuntu/ | sudo sh
 
 You can optionally add the `vagrant` user to the `docker` group so that you
-don't have to write "sudo" before every priveledged `docker`
+don't have to write "sudo" before every privileged `docker`
 command:
 
     sudo usermod -aG docker vagrant
