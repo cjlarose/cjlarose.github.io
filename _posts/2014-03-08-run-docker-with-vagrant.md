@@ -46,9 +46,8 @@ Docker.
 
     Your-Mac:docker-vm$ vagrant up
     Your-Mac:docker-vm$ vagrant ssh
-    vagrant@precise64:~$ sudo apt-get install curl
-    vagrant@precise64:~$ curl https://get.docker.io/ubuntu/ > install_docker.sh
-    vagrant@precise64:~$ sudo sh install_docker.sh
+    vagrant@precise64:~$ sudo apt-get install -y curl
+    vagrant@precise64:~$ curl https://get.docker.io/ubuntu/ | sudo sh
 
 You can optionally add the `vagrant` user to the `docker` group so that you
 don't have to write "sudo" before every priveledged `docker`
