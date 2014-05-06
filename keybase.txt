@@ -1,0 +1,71 @@
+==================================================================
+https://keybase.io/cjlarose
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://cjlarose.com
+  * I am cjlarose (https://keybase.io/cjlarose) on keybase.
+  * I have a public key with fingerprint 0111 205E B8EC C042 816C  0D2F AFB8 B897 5C69 8338
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "0111205eb8ecc042816c0d2fafb8b8975c698338",
+            "host": "keybase.io",
+            "key_id": "afb8b8975c698338",
+            "uid": "3d126bf0f4b7ab2430b6f8898e8d3400",
+            "username": "cjlarose"
+        },
+        "service": {
+            "hostname": "cjlarose.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1399410557,
+    "expire_in": 157680000,
+    "prev": "af7e70f3273fca7569b2df2090f57dfdf9e531658c1e1b7506021252c53b79a1",
+    "seqno": 2,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v0.1.14
+Comment: https://keybase.io/crypto
+
+yML6AnicbZF7UFRlGMYPoCgr4IZprBbJmW0Q2LZz2XNbQGm6qKlTCJpCtZ3vXOC0
+nD3LObuLugOjYEYSZhqNk7KsecnISTOcMIcCxhkhsoYaoVHGQSfSAeWy6kIik2eZ
++qfp++eb73l/z/N+77wXEmIgQ1SIrF1wbNaivqjutnEvlC+9WuGHgcJvhe1+2CnM
+XKLkKhZUtyq5PLAdRlAUxRBCALTAcYgNo1GSQ3hMZEVAA5qhCI5kaBynYQtcomgR
+hx4DWE2wSoqu6Q+HxOvq//DemQLOoxgJRES0AYoFmA1HACnSNEMLNI/bECQCaoLq
+YmVBp7l3SllV0QS4wgLrqk/idNU/0/o/hJVTZN3rVhWPwimleqXE43HbI0bPVneE
+LBeA458MB5BcvD63bvAJqiYpLtiO6iTnkSKhKM4wNhQhCMoCC1vckio4pAhBUCSN
+6CfSRvDNTEkJFCLiGIWLHEsRJAMwXsQQBhEJihd5kREIHCUJmkMFFFAEQiIYihEY
+R+CAYlhU768JZS4FtmP6N9liPVKTil2sx6vqI3e0vzELijJAsbOjI5uDDHHGf/fZ
+FJr/IGZBe/NjlXE+1zfWqq5zdSC79XTg89jLuQV3iu69d3X5mTtH+mvKzCNTf/5V
+3/12b1mRqaudTq0pAfuS/MNLw4ukNH9iuvLxd/7s54w38zb0jGUlrzRvm3sAnJqa
+M6DNnhgJvDjyNasxofvlq1pzJuVbGfjCoJ0zbuOOgrvyF4WpcPhcAEpuvHV34xEx
+6VrZr3tyd1c2Hvpt7Jnxkw/Hdhdujyem6br10BMdlY79wWhEXjLvwx5D5kZsdOFo
+T5Pbe6x68y8F68dt1sFcs6kdibl027ZnxZX4NDYtlTLLQ099evH4zVhP87vrWhr/
+2Jk+x7L3MlvlFMXa21pbb3js0K7PDi9LWfpC69rmkuvOQWj1vuSATV1sPF+dOYkH
+c87Mm+q7QUUP+6Z85T93Bcjep1/jg6HS6/Nfv/b43paMC4v/XpXwVV73mvgWdZN3
+Rf/cmIyC6ro88FOKN45uuLjB2rDyROLxgSH/MuxNlj8FW6B7O9ucI1eQLX5/cZez
+4skmZ1bvNFMJMftPrM1P9FWZhp/NMax+6WR4M9k2afz90tVwsOnsjvcH+FG55Wze
+w4P9SV9+cHrNeZZ6uT51or8osLzhQILJnNJ5OCNbypwYdA5hpo/yQ9O70n8ISUNL
+Aq1vPajp6JSPPi/tEH98pb5w+7cH79Pyjdq+6p3rogL27zf5PsnqfAQfXY5Z
+=AL05
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/cjlarose
+
+==================================================================
+
