@@ -26,8 +26,8 @@ directory on your Mac and in that directory create a text file called
     VAGRANTFILE_API_VERSION = "2"
 
     Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-      config.vm.box = "precise64"
-      config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+      config.vm.box = "precise32"
+      config.vm.box_url = "http://files.vagrantup.com/precise32.box"
     end
 
     Vagrant.configure("2") do |config|
@@ -46,6 +46,7 @@ Docker.
 
     Your-Mac:docker-vm$ vagrant up
     Your-Mac:docker-vm$ vagrant ssh
+    vagrant@precise64:~$ sudo apt-get update
     vagrant@precise64:~$ sudo apt-get install -y curl
     vagrant@precise64:~$ curl https://get.docker.io/ubuntu/ | sudo sh
 
