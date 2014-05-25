@@ -20,44 +20,42 @@ download and install both [VirtualBox][5] and [Vagrant][6]. Make a new
 directory on your Mac and in that directory create a text file called
 `Vagrantfile` with these contents:
 
-    # -*- mode: ruby -*-
-    # vi: set ft=ruby :
+{% highlight ruby %}
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-    VAGRANTFILE_API_VERSION = "2"
+VAGRANTFILE_API_VERSION = "2"
 
-    Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-      config.vm.box = "precise64"
-      config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-    end
+$script = <<SCRIPT
+apt-get update
+apt-get install -y curl
+curl https://get.docker.io/ubuntu/ | sh
+usermod -aG docker vagrant
+SCRIPT
 
-    Vagrant.configure("2") do |config|
-      for i in 49000..49900
-        config.vm.network "forwarded_port", guest: i, host: i
-      end
-    end
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  for i in 49000..49900
+    config.vm.network "forwarded_port", guest: i, host: i
+  end
+  config.vm.provision "shell", inline: $script
+end
+{% endhighlight %}
 
 This specifies a new 64-bit Ubuntu 12.04 virtual machine and conveniently
 forwards all ports in the range `49000..49900` from the host to the virtual
 machine. That way, if you run a web server (for example) from your VM, you can
-open a web browser from your Mac and see your site.
+open a web browser from your Mac and see your site. Upon provisioning, it
+installs Docker and lastely adds the `vagrant` user to the `docker` group so
+that you can run `docker` commands as that user.
 
-Then, we just start up the VM, establish an SSH connection with it, and install
-Docker.
+Then, we just start up the VM, establish an SSH connection with it, and start
+using Docker.
 
     Your-Mac:docker-vm$ vagrant up
     Your-Mac:docker-vm$ vagrant ssh
-    vagrant@precise64:~$ sudo apt-get update
-    vagrant@precise64:~$ sudo apt-get install -y curl
-    vagrant@precise64:~$ curl https://get.docker.io/ubuntu/ | sudo sh
-
-You can optionally add the `vagrant` user to the `docker` group so that you
-don't have to write "sudo" before every privileged `docker`
-command:
-
-    sudo usermod -aG docker vagrant
-
-You'll have to log out (`^D`) and log back in (`vagrant ssh`) for that last
-change to take effect.
+    vagrant@precise64:~$ docker ps
 
 [1]: https://www.docker.io/
 [2]: https://github.com/dotcloud/docker/blob/master/CHANGELOG.md
