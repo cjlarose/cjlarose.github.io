@@ -51,9 +51,13 @@ using Docker.
     Your-Mac:docker-vm$ vagrant ssh
     vagrant@precise64:~$ docker ps
 
+Vagrant's Docker Provisioner, by the way, can do some pretty neat tricks like
+building Docker images upon provisioning. Check out [the docs][7].
+
 [1]: https://www.docker.io/
 [2]: https://github.com/dotcloud/docker/blob/master/CHANGELOG.md
 [3]: https://github.com/dotcloud/docker/pull/4281
 [4]: http://docs.docker.io/en/latest/installation/mac/
 [5]: https://www.virtualbox.org/
 [6]: http://www.vagrantup.com/
+[7]: http://docs.vagrantup.com/v2/provisioning/docker.html
