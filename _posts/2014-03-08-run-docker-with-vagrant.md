@@ -16,9 +16,12 @@ my Mac.
 
 I advocate instead running both the Docker client and server in a virtual
 machine in VirtualBox using [Vagrant][6]. If you haven't done so already,
-download and install both [VirtualBox][5] and [Vagrant][6]. Make a new
-directory on your Mac and in that directory create a text file called
-`Vagrantfile` with these contents:
+download and install both [VirtualBox][5] and [Vagrant][6]. Vagrant uses a
+text file named `Vagrantfile` to configure new virtual machines. By default,
+Vagrant will synchronize the contents of the directory in which a `Vagrantfile`
+resides to the VM's `/vagrant` directory. This is very helpful if you'd like to
+modify source files on your Mac with your favorite tools and run corresponding
+Docker containers on the VM. Here's a `Vagrantfile` to get you started:
 
 {% highlight ruby %}
 # -*- mode: ruby -*-
@@ -26,29 +29,20 @@ directory on your Mac and in that directory create a text file called
 
 VAGRANTFILE_API_VERSION = "2"
 
-$script = <<SCRIPT
-apt-get update
-apt-get install -y curl
-curl https://get.docker.io/ubuntu/ | sh
-usermod -aG docker vagrant
-SCRIPT
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.provision "docker"
   for i in 49000..49900
     config.vm.network "forwarded_port", guest: i, host: i
   end
-  config.vm.provision "shell", inline: $script
 end
 {% endhighlight %}
 
-This specifies a new 64-bit Ubuntu 12.04 virtual machine and conveniently
-forwards all ports in the range `49000..49900` from the host to the virtual
-machine. That way, if you run a web server (for example) from your VM, you can
-open a web browser from your Mac and see your site. Upon provisioning, it
-installs Docker and lastely adds the `vagrant` user to the `docker` group so
-that you can run `docker` commands as that user.
+This specifies a new 64-bit Ubuntu 12.04 virtual machine with Docker and
+conveniently forwards all ports in the range `49000..49900` from the host to
+the virtual machine. That way, if you run a web server (for example) from your
+VM, you can open a web browser from your Mac and see your site.
 
 Then, we just start up the VM, establish an SSH connection with it, and start
 using Docker.
