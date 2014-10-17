@@ -3,6 +3,10 @@ layout: blog_entry
 title: "Run Docker in VirtualBox with Vagrant on Mac OS X"
 ---
 
+<ins datetime="2014-10-16">*Update (Oct 16, 2014):* [Docker 1.3][8] and the
+corresponding update to `boot2docker` obsoletes this workaround by allowing you
+to mount directories directy from OS X to Docker containers.</ins>
+
 [Docker][1] used to include a nice Vagrantfile, and this was the preferred way
 to run Docker on OS X. Since version [0.8.1][2] ([PR #4281][3]), though, the
 Docker documentation refers Mac OS X users to `boot2docker`. `boot2docker` runs
@@ -61,3 +65,4 @@ building Docker images upon provisioning. Check out [the docs][7].
 [5]: https://www.virtualbox.org/
 [6]: http://www.vagrantup.com/
 [7]: http://docs.vagrantup.com/v2/provisioning/docker.html
+[8]: https://blog.docker.com/2014/10/docker-1-3-signed-images-process-injection-security-options-mac-shared-directories/
