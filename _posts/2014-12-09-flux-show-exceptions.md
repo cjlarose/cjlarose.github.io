@@ -6,11 +6,11 @@ title: "Show exceptions from Flux Dispatcher callbacks"
 [Flux][1] is a frontend application architectural pattern by Facebook. Being an
 architectural pattern, it's largely a do-it-yourself kind of deal. That is,
 except for an implementation of the Dispatcher, which is provided in the
-[`flux`][2] package on npm.
+`[flux][2]` package on npm.
 
 The Dispatcher accepts callbacks with its `register` method, and invokes those
 callbacks anytime an action is `dispatch`ed to it. One curious behavior of the
-dispatcher, though, is that it will eat any exception that occurs in a callback,
+Dispatcher, though, is that it will eat any exception that occurs in a callback,
 and keep chugging along. Presumably, this is so that one failing callback
 doesn't cause the whole application to blow up. It has the effect, though, of
 making debugging incredibly painful.
@@ -71,7 +71,8 @@ module.exports = AppDispatcher;
 {% endhighlight %}
 
 
-That's it! Now your exceptions will be logged to the console again.
+That's it! Now your exceptions will be logged to the console again. Happy
+debugging!
 
 [1]: https://github.com/facebook/flux
 [2]: https://www.npmjs.org/package/flux
