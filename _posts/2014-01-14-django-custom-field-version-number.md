@@ -95,6 +95,26 @@ class VersionNumberField(models.Field):
 
 In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of is that Django's [IntegerField][1] supports *signed* 32-bit integers (from `-2147483648` to `2147483647`). This is why our `VersionNumber`'s `__int__` implementation returns integers in the same range.
 
+Then, to use `VersionNumberField` in your models:
+
+{% highlight python %}
+class Program(models.Model):
+    name = models.CharField(max_length=200)
+    version_number = VersionNumberField(default=VersionNumber(1,))
+{% endhighlight %}
+
+So you can use your model like so:
+
+{% highlight python %}
+>>> from programs.models import VersionNumber, Program
+>>> p = Program(name="My Cool App", version_number=VersionNumber(1,2,3))
+>>> p.save()
+>>> p.version_number
+<programs.models.VersionNumber(1, 2, 3, 0)>
+>>> str(p.version_number)
+'1.2.3'
+{% endhighlight %}
+
 Looking at all of these strange additions subtractions to `2**31`, it seems like it would be nice if Django provided an UnsignedIntegerField, but it doesn't. You can [implement your own][2], but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. 
 
 Our `VersionNumberField` can store version numbers from `0.0.0.0` to `255.255.255.255`. That range might look familiar because it's the same range as IPv4 addresses. This of course, should come as no surprise because IPv4 addresses *are* 32-bit integers&mdash;we mere humans just prefer the dot-decimal notation. Out of curiosity, I took at look at Django's (soon-to-be-deprecated) [IPAddressField][3] to see if they do something similar. Turns out, they don't. In [MySQL][7] and [SQLite][8], Django uses a `char(15)` field. Similarly, Django uses a `VARCHAR2(15)` in [Oracle][6]. In [PostgreSQL][5], Django uses the `inet` field, which [according to the documentation][4] stores both IPv4 and IPv6 host addresses with an optional netmask. It seems intuitive that storing IPv4 address as integers instead of as strings would save space as well as time on `ORDER BY` queries, so it's a curious anecdote.
