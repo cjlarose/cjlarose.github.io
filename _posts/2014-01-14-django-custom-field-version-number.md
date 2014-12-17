@@ -81,12 +81,12 @@ class VersionNumberField(models.Field):
         """
         Convert a VersionNumber or tuple to an int
         """
+        if isinstance(value, VersionNumber):
+            return int(value)
         if isinstance(value, tuple):
-            value = VersionNumber(*value) 
+            return int(VersionNumber(*value))
         if isinstance(value, int):
             return value
-
-        return int(value)
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
