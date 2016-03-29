@@ -52,7 +52,7 @@ Now that we've got a server up and running, let's get into handling some passwor
 
 ### User Registration
 
-During registration, a user will provide a username and a password. We'll verify that no existing user has the same username and validate that the password is sufficiently long. Then, we'll compute the hash of the password using Argon2 and store the output. In a real-world application, you would probably store passwords in a database like PostgreSQL or MongoDB, but for the purpose of demonstration only, we're just going to store our users in an in-memory JavaScript Object whose keys are usenames and whose values are password hashes.
+During registration, a user will provide a username and a password. We'll verify that no existing user has the same username and validate that the password is sufficiently long. Then, we'll compute the hash of the password using Argon2 and store the output. In a real-world application, you would probably store passwords in a database like PostgreSQL or MongoDB, but for the purpose of demonstration only, we're just going to store our users in an in-memory JavaScript Object whose keys are usernames and whose values are password hashes.
 
 We're going to replace the Hello World route with one for creating new users. But first, let's install the Express middleware [body-parser][body-parser] so we can parse out JSON request bodies.
 
