@@ -6,9 +6,9 @@ Recall that an IPv4 address can be represented as a 32-bit integer. In many RDBM
 
 In my case, after a migration from MySQL, I ended up with a `numeric(10)` field and I wanted to convert it to a `inet` field. Here's how I did it:
 
-{% highlight postgresql %}
+```sql
 ALTER TABLE my_table ALTER COLUMN ip_address TYPE inet
 USING '0.0.0.0'::inet + ip_address::bigint;
-{% endhighlight %}
+```
 
 There is no conversion defined from `numeric` to `inet`, so `ip_address::inet` would fail. So here we take advantage of addition being defined for `inet` and `bigint` operands to accomplish the conversion.

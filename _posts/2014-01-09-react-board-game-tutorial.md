@@ -11,7 +11,7 @@ Today, we'll be implementing the board game [Go][3]. If you don't know how to pl
 
 Let's start with `index.html`.
 
-{% highlight html %}
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -28,7 +28,7 @@ Let's start with `index.html`.
     <script type="text/jsx" src="go.js"></script>
   </body>
 </html>
-{% endhighlight %}
+```
 
 There's nothing too surprising here. Notice that we include `JSXTransformer.js`. This is React's preprocessor. It allows us to use a special custom syntax to describe our React views that's more akin to writing HTML than Javascript. While developing, relying on the client to preprocess your React files is fine, but when you go to production, make sure you [precompile those assets][5].  Please note that the dependency above on [Underscore.js][6] isn't necessary to build React apps, but I use it in my application logic because it provides some nice utility functions that Javascript doesn't give us out of the box.
 
@@ -36,7 +36,7 @@ There's nothing too surprising here. Notice that we include `JSXTransformer.js`.
 
 Above, I include both `board.js` and `go.js`. `board.js` contains all of the game logic. It's always a good idea to separate *application* logic from *presentation* logic, and React encourages this practice. Note that `board.js` has no dependency on React at all: it's just vanilla Javascript that we know and love.
 
-{% highlight javascript %}
+```javascript
 /*
  * board.js - Game logic for the board game Go
  */
@@ -70,7 +70,7 @@ Board.prototype.create_board = function(size) {
  * Switches the current player
  */
 Board.prototype.switch_player = function() {
-    this.current_color = 
+    this.current_color =
         this.current_color == Board.BLACK ? Board.WHITE : Board.BLACK;
 };
 
@@ -95,7 +95,7 @@ Board.prototype.end_game = function() {
  * Attempt to place a stone at (i,j). Returns true iff the move was legal
  */
 Board.prototype.play = function(i, j) {
-    console.log("Played at " + i + ", " + j);   
+    console.log("Played at " + i + ", " + j);
     this.attempted_suicide = this.in_atari = false;
 
     if (this.board[i][j] != Board.EMPTY)
@@ -146,7 +146,7 @@ Board.prototype.play = function(i, j) {
  * orthagonally adjacent intersections
  */
 Board.prototype.get_adjacent_intersections = function(i , j) {
-    var neighbors = []; 
+    var neighbors = [];
     if (i > 0)
         neighbors.push([i - 1, j]);
     if (j < this.size - 1)
@@ -201,7 +201,7 @@ Board.prototype.get_group = function(i, j) {
         "stones": visited_list
     };
 }
-{% endhighlight %}
+```
 
 An instance of the `Board` class has several attributes that describe what a game of Go looks like at a particular moment in time. This is a common paradigm in React: get familiar with building models that have attributes that can be used by themselves to build your views. Let's take a look at how a `Board` is represented.
 
@@ -209,7 +209,7 @@ An instance of the `Board` class has several attributes that describe what a gam
 * `Board.current_color` stores an integer that identifies whose turn it is. Because the player with the black stones plays first, we initialize `this.current_color` to `Board.BLACK`.
 * `Board.board` is an integer matrix that stores which color stones occupy which spaces. Because the board starts empty, we initialize every cell to `Board.EMPTY`.
 * A game of Go ends when both players pass their turns consecutively. If a player passes his turn, we set `Board.last_move_passed` so that if the next move is also a pass, we can detect that the game has ended.
-* When a player threatens his opponent, we set the flag `Board.in_atari` to true, so we can alert the player in danger. In Go, this is considered to be polite. 
+* When a player threatens his opponent, we set the flag `Board.in_atari` to true, so we can alert the player in danger. In Go, this is considered to be polite.
 * Finally, we set the `Board.attempted_suicide` flag if a user made an invalid move &mdash; one that would mean suicide for their piece.
 
 ## The fun part: building React Components
@@ -218,14 +218,14 @@ Now we have a good representation of the board game in pure Javascript. We can u
 
 What follows is several segments of `go.js`, where we build our React components. To see the file in full, [check it out on Github][8]. We begin the file with a comment declaring that this file should be preprocessed by [JSX][5]. Also, we create a constant called `GRID_SIZE`, which will store the pixel dimensions of a grid square on our game board.
 
-{% highlight javascript %}
+```javascript
 /** @jsx React.DOM */
 var GRID_SIZE = 40;
-{% endhighlight %}
+```
 
 Next, let's build out first React component. This one's pretty simple.  It represents a single grid intersection on the Go board.
 
-{% highlight javascript %}
+```javascript
 var BoardIntersection = React.createClass({
     handleClick: function() {
         if (this.props.board.play(this.props.row, this.props.col))
@@ -242,12 +242,12 @@ var BoardIntersection = React.createClass({
             classes += this.props.color == Board.BLACK ? "black" : "white";
 
         return (
-            <div onClick={this.handleClick} 
+            <div onClick={this.handleClick}
                 className={classes} style={style}></div>
         );
     }
 });
-{% endhighlight %}
+```
 
 BoardIntersection has several properties that we can pass when we initialize an instance:
 
@@ -258,7 +258,7 @@ BoardIntersection has several properties that we can pass when we initialize an 
 
 Next, let's build the Component that represents the game board.
 
-{% highlight javascript %}
+```javascript
 var BoardView = React.createClass({
     render: function() {
         var intersections = [];
@@ -278,13 +278,13 @@ var BoardView = React.createClass({
         return <div style={style} id="board">{intersections}</div>;
     }
 });
-{% endhighlight %}
+```
 
 BoardView has only two properties we'll use: `BoardView.board` and `BoardView.onPlay`. These properties play the same roles here as they did in `BoardIntersection`. In the `render` method of this Component, we create n x n instances of `BoardIntersection` and add them each in as children.
 
 Next, we create a few more components: one to display alert messages and another that provides a button to pass your turn.
 
-{% highlight javascript %}
+```javascript
 var AlertView = React.createClass({
     render: function() {
         var text = "";
@@ -305,16 +305,16 @@ var PassView = React.createClass({
     },
     render: function() {
         return (
-            <input id="pass-btn" type="button" value="Pass" 
+            <input id="pass-btn" type="button" value="Pass"
                 onClick={this.handleClick} />
         );
     }
 });
-{% endhighlight %} 
+```
 
 Finally, we build a component to wrap all of our sub-Components up. We initialize an instance of our model, and call `React.renderComponent` to bind a Component to a DOM element.
 
-{% highlight javascript %} 
+```javascript
 var ContainerView = React.createClass({
     getInitialState: function() {
         return {'board': this.props.board};
@@ -327,7 +327,7 @@ var ContainerView = React.createClass({
             <div>
                 <AlertView board={this.state.board} />
                 <PassView board={this.state.board} />
-                <BoardView board={this.state.board} 
+                <BoardView board={this.state.board}
                     onPlay={this.onBoardUpdate.bind(this)} />
             </div>
         )
@@ -340,11 +340,11 @@ React.renderComponent(
     <ContainerView board={board} />,
     document.getElementById('main')
 );
-{% endhighlight %}
+```
 
-The `ContainerView` is our only stateful Component. It has exactly one property of its state: `board`, which is initialized to the `board` passed to it via its `props`. We pass a callback function called `this.onBoardUpdate` to the `BoardView`, so we can be notified when the board has changed. 
+The `ContainerView` is our only stateful Component. It has exactly one property of its state: `board`, which is initialized to the `board` passed to it via its `props`. We pass a callback function called `this.onBoardUpdate` to the `BoardView`, so we can be notified when the board has changed.
 
-## How it all works 
+## How it all works
 
 In the `onBoardUpdate` callback, we call `this.setState`, which notifies React that our model has changed, and React should then re-render our component so that it reflects the current model state. This is where the magic of React comes in: we can naively pretend that every time we call `this.setState`, React replaces our DOM element with whatever was returned by our Component's `render` method.  In practice, this is all you have to know, and for the most part, we can go on happily thinking in this way.
 
