@@ -33,7 +33,7 @@ Let's just get a basic Express server up. Paste this example from the [Express H
 
 [express-hello]: http://expressjs.com/en/starter/hello-world.html
 
-{% highlight javascript %}
+```javascript
 var express = require('express');
 var app = express();
 
@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
-{% endhighlight %}
+```
 
 To make sure this works, execute `npm start`. You should see `Example app listening on port 3000!` printed to your console. If you visit `http://localhost:3000` in your browser, you should see a page that says "Hello World!" on it.
 
@@ -62,7 +62,7 @@ We're going to replace the Hello World route with one for creating new users. Bu
 
 Now we can update `server.js` with the following:
 
-{% highlight javascript %}
+```javascript
 var crypto = require('crypto');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -107,7 +107,7 @@ app.post('/users', jsonParser, function (req, res) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
-{% endhighlight %}
+```
 
 We can test this by sending in a request to `http://localhost:9000/users` with a JSON body containing `username` and `password` keys. I like to use [Postman][postman] for things like this, but you can do this from the command line with good 'ole `curl`.
 
@@ -131,7 +131,7 @@ This format is called [Modular Crypt Format][mcf]. The string contains the algor
 
 Let's write a new route for our Express server that'll take a username and password and check to make sure they are correct.
 
-{% highlight javascript %}
+```javascript
 app.post('/sessions', jsonParser, function (req, res) {
   var encodedHash;
   var username;
@@ -151,7 +151,7 @@ app.post('/sessions', jsonParser, function (req, res) {
     return res.status(200).send('Welcome ' + username + '!');
   });
 });
-{% endhighlight %}
+```
 
 We can test this by creating a new user as we did before, then trying to log in with the same credentials:
 

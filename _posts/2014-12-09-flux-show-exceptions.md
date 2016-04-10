@@ -20,7 +20,7 @@ a subclass of `Dispatcher` called `AppDispatcher`, as in the
 [TodoMVC example][3]. First, we'll define a function that logs errors of the
 function it's passed:
 
-{% highlight javascript %}
+```javascript
 var vomitify = function(f) {
   return function() {
     try {
@@ -30,7 +30,7 @@ var vomitify = function(f) {
     }
   }
 };
-{% endhighlight %}
+```
 
 *Note: Here, we reference the `console` object, which will fail spectacularly in
 older versions of IE when you don't have the developer console open. Make sure
@@ -39,7 +39,7 @@ console][4] safely.*
 
 Now, we'll override the `dispatch` method of `AppDispatcher` to use `vomitify`.
 
-{% highlight javascript %}
+```javascript
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('object-assign');
 
@@ -68,7 +68,7 @@ var AppDispatcher = assign(new Dispatcher(), {
 });
 
 module.exports = AppDispatcher;
-{% endhighlight %}
+```
 
 
 That's it! Now your exceptions will be logged to the console again. Happy

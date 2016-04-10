@@ -9,7 +9,7 @@ One way to fix the lexicographical sort problem is to zero-pad all components of
 
 The solution presented below takes another approach. Instead of storing version numbers as strings, we store them as 32-bit integers. We partition those 32 bits into four parts: major, minor, patch, and build. Using this scheme, we can unambiguously map any 4-part version number to a 32-bit integer. Unfortunately, this solution fixes the number of components you can represent in your version numbers, so this may not be the appropriate approach for your application.
 
-{% highlight python %}
+```python
 class VersionNumber(object):
     def __init__(self, major, minor=0, patch=0, build=0):
         self.number = (int(major), int(minor), int(patch), int(build))
@@ -44,11 +44,11 @@ class VersionNumber(object):
             self.__class__.__name__, 
             repr(self.number)
         )
-{% endhighlight %}
+```
 
 In the `__int__` method of the `VersionNumber` class, we can see how the version number is mapped to an integer by using some bitwise arithmetic to store the major version in the highest 8 bits, the minor version in the next 8 bits, the patch in the next 8 bits, and the build number in the lowest 8 bits. Here, `__int__` will always return an `int` in the range `[-2147483648, 2147483647]`.
 
-{% highlight python %}
+```python
 import struct
 from django.db import models
 
@@ -91,21 +91,21 @@ class VersionNumberField(models.Field):
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
         return self.get_prep_value(value)
-{% endhighlight %}
+```
 
 In `get_internal_type`, we return `IntegerField` so that Django's ORM can pick the appropriate database type for storing our version numbers as integers. Something to take note of is that Django's [IntegerField][1] supports *signed* 32-bit integers (from `-2147483648` to `2147483647`). This is why our `VersionNumber`'s `__int__` implementation returns integers in the same range.
 
 Then, to use `VersionNumberField` in your models:
 
-{% highlight python %}
+```python
 class Program(models.Model):
     name = models.CharField(max_length=200)
     version_number = VersionNumberField(default=VersionNumber(1,))
-{% endhighlight %}
+```
 
 So you can use your model like so:
 
-{% highlight python %}
+```python
 >>> from programs.models import VersionNumber, Program
 >>> p = Program(name="My Cool App", version_number=VersionNumber(1,2,3))
 >>> p.save()
@@ -113,7 +113,7 @@ So you can use your model like so:
 <programs.models.VersionNumber(1, 2, 3, 0)>
 >>> str(p.version_number)
 '1.2.3'
-{% endhighlight %}
+```
 
 Looking at all of these strange additions subtractions to `2**31`, it seems like it would be nice if Django provided an UnsignedIntegerField, but it doesn't. You can [implement your own][2], but the reason Django doesn't do it is a good one: not all supported DBMSs have an unsigned integer type, PostgreSQL being among them. 
 

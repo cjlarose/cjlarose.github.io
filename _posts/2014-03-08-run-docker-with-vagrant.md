@@ -27,7 +27,7 @@ resides to the VM's `/vagrant` directory. This is very helpful if you'd like to
 modify source files on your Mac with your favorite tools and run corresponding
 Docker containers on the VM. Here's a `Vagrantfile` to get you started:
 
-{% highlight ruby %}
+```ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "forwarded_port", guest: i, host: i
   end
 end
-{% endhighlight %}
+```
 
 This specifies a new 64-bit Ubuntu 12.04 virtual machine with Docker and
 conveniently forwards all ports in the range `49000..49900` from the host to
