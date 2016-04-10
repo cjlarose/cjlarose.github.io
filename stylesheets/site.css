@@ -36,11 +36,6 @@ body.resume #content ul {
 }
 
 body.resume #content li {
-    list-style: none;
-}
-
-#skills h3 {
-    margin: 0;
 }
 
 .print-visible {
