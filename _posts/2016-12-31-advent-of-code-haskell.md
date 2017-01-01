@@ -3,12 +3,19 @@ layout: blog_entry
 title: "Lessons learned from Advent of Code 2016: Haskell solutions"
 ---
 
+This December, I decided to tackle the [Advent of Code Problems][aoc-2016] in Haskell. Although I'd used Haskell from time to time on hobby projects, I had never been completely comfortable with it. AoC was a great opportunity to write Haskell almost every day for a month, and I'd like to share what I've learned. Hopefully it'll help someone who's getting started with Haskell. I'll inject links to relevant parts of the code throughout the post, but if you'd just like to skip to the code, you're welcome to check out the [Github repo][repo].
+
+[aoc-2016]: http://adventofcode.com/2016
+[repo]: https://github.com/cjlarose/advent-2016
+
 ## Use infinite lists like lazy iterators in other languages
+
+Haskell's most accessible data structure is the (linked) list.
 
 Day 14: One Time Pad
 Day 18: Rogue
 
-## Use the Applicative and Functor instances of Parsec when you can
+## Use the Applicative and Functor instances of Parsec when possible
 
 I've found this rule of thumb to be helpful: Use the Monad instances of ParsecT when you need context-sensitivity--otherwise, just use the Applicative and Functor instances.
 
@@ -33,7 +40,7 @@ stack build --executable-profiling --library-profiling --ghc-options="-fprof-aut
 stack exec -- advent2016 21
 ```
 
-## Use Debug.Trace when you need to do some debugging by printing to the console
+## Debug your code with Debug.Trace
 
 Using `ghci` can be very helpful to exercise your Haskell functions in isolation when you're debugging. Sometimes, though, you just need to figure out what's going on in your program by printing some values to the console. In JavaScript, you could add some `console.log` statements, and in Python you could `print` what you need. 
 But Haskell represents side effects (like writing to `STDOUT`) explicitly in its type system, so you might think that it would be difficult to do something similar. In fact, there's a backdoor of sorts in `Debug.Trace` that allows you to write debugging statements without changing the type signature of the function you're debugging.
@@ -50,17 +57,17 @@ Use it like this
 ```
 ```
 
-## Use hlint, and run it in your editor
+## Run hlint on your code
 
 Control.Arrow what?
 
 [day6-part1]: https://github.com/cjlarose/advent-2016/commit/eafef0a97cd89a80c62b5ec2c64e080f83730cf6
 
-## Use zippers to represent a data structure along with a position within the data structure
+## Represent data structures along with positions within those structures using zippers
 
 Day 11: Generators
 
-## Use State monad when its cumbersome to represent all updates explicitly
+## Use the State monad when it's cumbersome to represent all updates explicitly
 
 Day 10: Balance Bots, Day 12: Monorail
 
