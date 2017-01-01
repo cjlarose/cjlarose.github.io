@@ -1,10 +1,5 @@
 ---
 layout: default
-head_elements: |
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.0/moment.min.js"></script>
-  <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-  <script src="/javascripts/github_activity.js"></script>
 ---
   <h3>Latest entries</h3>
   <ul class="entries">
@@ -17,20 +12,3 @@ head_elements: |
    
     {% endfor %}
   </ul>
-  <h3>Latest commits on Github</h3>
-  <div id="activity-feed"></div>
-  <script type="text/javascript">
-  var username = "cjlarose";
-  var url = "https://api.github.com/users/" + username + "/events";
-  $(function() {
-      $("#activity-feed")
-        .hide()
-        .githubActivity({
-            username: "cjlarose",
-            num_events: 5,
-            success:  function() {
-                $(this).animate({opacity: 'toggle', height: 'toggle'}, 'slow');
-            }
-        });;
-  });
-  </script>
